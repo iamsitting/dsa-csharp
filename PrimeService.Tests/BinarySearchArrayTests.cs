@@ -1,12 +1,12 @@
 namespace PrimeService.Tests;
 
-public class SearchArrayTests
+public class BinarySearchArrayTests
 {
-    private ILinearSearchArray _sut;
+    private IBinarySearchArray _sut;
     [SetUp]
     public void Setup()
     {
-        _sut = new LinearSearchArray();
+        _sut = new BinarySearchArray();
     }
 
     [Test]
@@ -16,7 +16,7 @@ public class SearchArrayTests
         int [] input = {1, 2, 3, 4, 5, 6, 10};
 
         // act
-        var result = _sut.Search(input, 4);
+        var result = _sut.Search(input, 4, 0, input.Length);
 
         // assert
         Assert.That(result, Is.True);
@@ -30,7 +30,7 @@ public class SearchArrayTests
         int [] input = {1, 2, 3, 4, 5, 6, 10};
 
         // act
-        var result = _sut.Search(input, 7);
+        var result = _sut.Search(input, 7, 0, input.Length);
 
         // assert
         Assert.That(result, Is.False);
