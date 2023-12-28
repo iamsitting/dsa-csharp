@@ -97,45 +97,50 @@ public class LinkedList<T> : ILinkedList<T>
 
     public T? Remove(T item)
     {
-        if (Head == null)
+        var current = Tail;
+        for (var i = 0; i < Length; ++i)
+        {
+            if (current.Value.Equals(item))
+            {
+                break;
+            }
+            current = current.Next;
+        }
+        if (current == null)
+        {
             return default;
-
-        var node = Head;
-
-        if (Length == 1)
-        {
-            if (node.Value!.Equals(item))
-            {
-                Head = null;
-                Tail = null;
-                Length = 0;
-                return node.Value;
-            }
         }
 
-        for (var i = 0; i < Length; i++)
+        --Length;
+
+        if (Length == 0)
         {
-            if (node.Next == null)
-            {
-                // TODO: handle tail condition
-            }
-
-            if (node.Previous == null)
-            {
-                // TODO: handle head condition
-            }
-
-            if (node.Next!.Equals(item))
-            {
-                var toRemove = node.Next;
-                node.Next = toRemove.Next;
-                node.Next!.Previous = node;
-                --Length;
-                return toRemove.Value;
-            }
-            node = node.Next;
+            Head = default;
+            Tail = default;
+            return default;
         }
 
+        if (current.Previous != null)
+        {
+            current.Previous = current.Next;
+        }
+
+        if (current.Next != null)
+        {
+            current.Next = current.Previous;
+        }
+
+        if (current == Head)
+        {
+            Head = current.Next;
+        }
+        if (current == Tail)
+        {
+            Tail = current.Previous;
+        }
+
+        current.Previous = default;
+        current.Next = default;
         return default;
     }
 
@@ -183,40 +188,41 @@ public class LinkedList<T> : ILinkedList<T>
     {
         if (index > Length)
         {
-            throw new IndexOutOfRangeException();
+            throw new Exception("Bad data structure");
         }
 
         if (index == 0)
         {
+            ++Length;
             Prepend(item);
             return;
         }
 
         if (index == Length - 1)
         {
+            ++Length;
             Append(item);
             return;
         }
 
-        var node = Head;
+        var currentNode = Head;
 
         for (var i = 1; i < index; i++)
         {
-            if (node.Next == null)
-            {
-                // TODO: handle tail condition
-            }
-
-            if (node.Previous == null)
-            {
-                // TOOD: hanlde head condition
-            }
-
-            node = node.Next;
+            currentNode = currentNode.Next;
         }
 
-        var temp = node;
-        // TODO: work in progress
+        var newNode = new Node<T>(item);
+        newNode.Next = currentNode;
+        newNode.Previous = currentNode.Previous;
+        currentNode.Previous = currentNode;
+
+        if (newNode.Previous != null)
+        {
+            currentNode.Previous.Next = currentNode;
+        }
+        ++Length;
+
         return;
     }
 }
