@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
 namespace PrimeService;
 
 public class MazePoint
@@ -14,7 +18,7 @@ public class MazePoint
 
 public class MazeRecursion
 {
-    private int[][] Direction = new int[][]
+    private readonly int[][] Direction = new int[][]
     {
         new int[] { -1, 0 },
         new int[] { 1, 0 },
@@ -28,7 +32,7 @@ public class MazeRecursion
         MazePoint current,
         MazePoint end,
         bool[][] seen,
-        ref MazePoint[] path
+        ref Stack<MazePoint> path
     )
     {
         // invalid positions
@@ -46,7 +50,7 @@ public class MazeRecursion
         // at end
         if (current.Y == end.Y && current.X == end.X)
         {
-            path = path.Append(end).ToArray();
+            path.Push(end);
             return true;
         }
 
@@ -57,7 +61,7 @@ public class MazeRecursion
 
         // pre
         seen[current.Y][current.X] = true;
-        path = path.Append(current).ToArray();
+        path.Push(current);
 
         // recurse
         for (var i = 0; i < Direction.Length; ++i)
@@ -78,14 +82,14 @@ public class MazeRecursion
         }
 
         // post
-        path = path.Take(path.Length).ToArray();
+        _ = path.Pop();
         return false;
     }
 
     public MazePoint[] Solve(string[] maze, string wall, MazePoint start, MazePoint end)
     {
         var seen = Array.Empty<bool[]>();
-        var path = Array.Empty<MazePoint>();
+        var path = new Stack<MazePoint>();
 
         for (var i = 0; i < maze.Length; ++i)
         {
@@ -94,6 +98,6 @@ public class MazeRecursion
         }
 
         _ = Walk(maze, wall, start, end, seen, ref path);
-        return path;
+        return path.ToArray();
     }
 }

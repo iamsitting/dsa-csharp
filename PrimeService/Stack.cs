@@ -1,6 +1,6 @@
 namespace PrimeService;
 
-public interface IStack<T>
+public interface IStackStructure<T>
 {
     int Length { get; }
     void Push(T item);
@@ -15,12 +15,12 @@ public class SNode<T>
 
     public SNode(T item)
     {
-        Value = T;
+        Value = item;
         Previous = default;
     }
 }
 
-public class Stack<T> : IStack<T>
+public class MyStackStructure<T> : IStackStructure<T>
 {
     public int Length { get; private set; }
     private SNode<T>? Head { get; set; }
