@@ -19,9 +19,11 @@ public class BubbleSortTests
 
         // act
         var result = _sut.Sort(input);
-
-        // assert
-        Assert.That(result[0], Is.EqualTo(1));
-        Assert.That(result[result.Length - 1], Is.EqualTo(2331));
+        Assert.Multiple(() =>
+        {
+            // assert
+            Assert.That(result[0], Is.EqualTo(1));
+            Assert.That(result[^1], Is.EqualTo(2331));
+        });
     }
 }
